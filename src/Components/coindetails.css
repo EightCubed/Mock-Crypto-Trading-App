@@ -1,0 +1,91 @@
+.single-coin-title {
+    display: flex;
+    margin: 50px 0px 30px 200px;
+}
+
+.single-coin-rank {
+    display: flex;
+    align-items: center;
+    color: white;
+    background-color: black;
+    font-weight: 600;
+    padding: 10px;
+    margin-right: 10px;
+    border-radius: 50%;
+}
+
+.single-coin-name {
+    display: flex;
+    font-size: 30px;
+    font-weight: 700;
+    margin: auto 0;
+}
+
+.single-coin-price {
+    margin: 10px 0 10px 600px;
+    padding: 5px 10px;
+    color: white;
+    background-color: black;
+    border-radius: 8px;
+    font-weight: 800;
+}
+
+.rank-wrapper {
+    display: flex;
+    max-height: 38px;
+    margin: auto 0;
+}
+
+.coin-image {
+    display: flex;
+    margin: auto 0;
+    width: 35px;
+    height: 35px;
+    padding: 0 10px 0 10px;
+}
+
+.coin-chart {
+    display: flex;
+    justify-content: center;
+}
+
+.description {
+    display: flex;
+    flex-direction: column;
+    margin: 20px auto;
+    max-width: 1000px;
+}
+
+.buy-sell {
+    display: flex;
+    justify-content: center;
+    padding-top: 50px;
+}
+
+.buy,.sell {
+    display: flex;
+    padding: 20px 60px;
+    background-color: black;
+    color: white;
+    border-radius: 10px;
+    font-size: 24px;
+    font-weight: 900;
+    font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif
+}
+
+.buy:hover,.sell:hover {
+    background-color: white;
+    color: black;
+}
+
+.buy {
+    margin-right: 30px;
+}
+
+.sell {
+    margin-left: 30px;
+}
+
+.currency-space {
+    padding-left: 4px;
+}

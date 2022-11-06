@@ -6,6 +6,10 @@ import { FaArrowLeft, FaArrowRight } from "react-icons/fa"
 import './coinslist.css';
 import { useNavigate } from "react-router-dom";
 
+interface ASC_DESC{
+    order: "asc" | "desc";
+}
+
 interface COINS_LIST_TYPE {
     id: string;
     symbol: string;
@@ -37,12 +41,13 @@ const CURRENCY = "$";
 
 const CoinsList = () => {
     const [coinsList,setCoinsList] = useState<COINS_LIST_TYPE[]>([initState])
+    const [asc,setAsc] = useState<ASC_DESC>({order:'asc'})
     const [isLoading,setIsLoading] = useState<boolean>(false)
     const [page,setPage] = useState<number>(1);
 
     const fetchCoinsList = () => {
         setIsLoading(true);
-        axios.get(`https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=${PER_PAGE}&page=${page}&sparkline=false`).then(
+        axios.get(`https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=${order}&per_page=${PER_PAGE}&page=${page}&sparkline=false`).then(
             (res) => {
                 setCoinsList(res['data'])
                 setIsLoading(false)
@@ -67,7 +72,6 @@ const CoinsList = () => {
     const navigate=useNavigate()
 
     const handleClick = (data:COINS_LIST_TYPE) => {
-        console.log(data.symbol)
         navigate(`/coins/${data.id}`)
     }
 
@@ -79,7 +83,14 @@ const CoinsList = () => {
         if (n >= 1e12) return +(n / 1e12).toFixed(1) + "T";
       };
 
-    console.log(coinsList[0])
+    const handleOrderChange = (str:string) => {
+        console.log(asc.order)
+        if (asc.order==='asc')
+            setAsc({order:'desc'})
+        else
+            setAsc({order:'desc'})
+        console.log(asc.order)
+    }
 
     return(
         <>
@@ -96,7 +107,7 @@ const CoinsList = () => {
                         <td width={50}>Rank</td>
                         <td width={150}>Symbol</td>
                         <td width={200}>Coin Name</td>
-                        <td width={120}>Market Cap</td>
+                        <td width={120} onClick={()=>handleOrderChange("market_cap")}>Market Cap</td>
                         <td width={150}>All Time High</td>
                         <td width={150}>24H high</td>
                         <td width={150}>Current Price</td>
@@ -113,18 +124,40 @@ const CoinsList = () => {
                                         <div className="coin-name">{data.name}</div>
                                     </div>
                                 </td>
-                                <td>{formatCash(data.market_cap)}{CURRENCY}</td>
-                                <td>{data.ath}{CURRENCY}</td>
-                                <td>{data.high_24h}{CURRENCY}</td>
-                                <td>{data.current_price}{CURRENCY}</td>
-                                <td>{data.price_change_24h.toFixed(3)}{CURRENCY}</td>
+                                <td>
+                                    <span className="bold-500">{formatCash(data.market_cap)}{CURRENCY}</span>
+                                </td>
+                                <td>
+                                    <span>{data.ath}{CURRENCY}</span>
+                                </td>
+                                <td>
+                                    <span>{data.high_24h}{CURRENCY}</span>
+                                </td>
+                                <td>
+                                    <span className="bold-700">{data.current_price}{CURRENCY}</span>
+                                </td>
+                                <td>
+                                    <span className={data.price_change_24h>=0 ?"green-background" : "red-background"}>
+                                        {data.price_change_24h>0 && "+"}
+                                        {data.price_change_24h && 
+                                            <span>{data.price_change_24h.toFixed(3)}{CURRENCY}</span>
+                                        }
+                                        {!data.price_change_24h && <span>N/A</span>}
+                                    </span>
+                                </td>
                             </tr>)
                     })}
                 </table>
                 <div className="pagination">
-                    <FaArrowRight onClick={handleIncrement}/>
-                    Page : {page}
-                    <FaArrowLeft onClick={handleDecrement}/>
+                    <button className="arrowRight" onClick={handleIncrement}>
+                        <FaArrowRight />
+                    </button>
+                    <span className="page">
+                        Page : {page}
+                    </span>
+                    <button className="arrowLeft" onClick={handleDecrement} disabled={page===1}>
+                        <FaArrowLeft />
+                    </button>
                 </div>
             </div>
         </>

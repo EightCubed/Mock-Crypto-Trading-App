@@ -6,6 +6,8 @@ import TopBar from "./TopBar";
 import './coindetails.css';
 import RenderChart from "./RenderChart";
 import Modal from "./Modal";
+import { useDispatch, useSelector } from "react-redux";
+import { increment, selectCount } from "./Store/counterSlice";
 
 interface COIN_DATA_TYPE {
     id: string;
@@ -72,17 +74,19 @@ const CoinDetails = () => {
     const [openBuyModal,setOpenBuyModal] = useState<boolean>(false)
     const [openSellModal,setOpenSellModal] = useState<boolean>(false)
 
+    const dispatch = useDispatch();
+
     const fetchSingleCoin = () => {
         setIsLoading(true);
         axios.get(`https://api.coingecko.com/api/v3/coins/${id}`).then(
             (res) => {
                 setCoinData(res['data'])
-                setIsLoading(false)
-        })
-        axios.get(`https://api.coingecko.com/api/v3/coins/${id}/market_chart/range?vs_currency=usd&from=1656361155&to=1666361155
-        `).then( 
-            (res) => {
-                setCoinPrices(res['data'])
+            })
+            axios.get(`https://api.coingecko.com/api/v3/coins/${id}/market_chart/range?vs_currency=usd&from=1656361155&to=1666361155
+            `).then( 
+                (res) => {
+                    setCoinPrices(res['data'])
+                    setIsLoading(false)
         })
     }
 
@@ -115,6 +119,13 @@ const CoinDetails = () => {
         setOpenSellModal(false)
     }
 
+    const handleBuyClick = () => {
+        dispatch(increment)
+    }
+
+    const count=useSelector(selectCount)
+    console.log(count)
+
     return(
         <>
             {isLoading && <Loader />}
@@ -124,10 +135,11 @@ const CoinDetails = () => {
                     handleClose={handleBuyCloseModal}
                 >
                     <div>
-                        Buy
+                        <h2>BUY</h2>
                     </div>
                     <div>
                         Buy Price : {coinData.market_data.current_price.usd}
+                        <button onClick={handleBuyClick}>Buy</button>
                     </div>
                 </Modal>
             }

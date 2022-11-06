@@ -33,7 +33,7 @@
     box-shadow: 0px 0px 5px rgba(0,0,0,0.3);
     -webkit-box-shadow: 0px 0px 5px rgba(0,0,0,0.3);
     -moz-box-shadow: 0px 0px 5px rgba(0,0,0,0.3);
-    line-height: 42px;
+    line-height: 41px;
   }
 
 .coin-img-name {
@@ -49,8 +49,11 @@
 .pagination {
     display: flex;
     flex-direction: row-reverse;
+    height: 40px;
     margin-right: 100px;
     position: sticky;
+    margin-top: 30px;
+    margin-bottom: 30px;
 }
 
 tr:nth-child(even) {
@@ -59,4 +62,41 @@ tr:nth-child(even) {
 
 tr:nth-child(odd) {
     background-color: rgb(255, 245, 227);
+}
+
+.red-background,.green-background {
+    color: white;
+    font-weight: 900;
+    padding: 4px 8px;
+    border-radius: 5px;
+}
+
+.green-background {
+    background-color: rgb(70, 220, 70);
+}
+
+.red-background {
+    background-color: rgb(252, 52, 45);
+}
+
+.bold-500 {
+    font-weight: 500;
+}
+.bold-600 {
+    font-weight: 600;
+}
+.bold-700 {
+    font-weight: 700;
+}
+
+.arrowRight {
+    margin: 5px;
+}
+
+.arrowLeft {
+    margin: 5px;
+}
+
+.page {
+    margin-top: 10px;
 }

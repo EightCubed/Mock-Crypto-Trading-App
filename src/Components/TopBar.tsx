@@ -6,7 +6,7 @@ const TopBar = () => {
         <div className='topbar'>
             <div className='navigation'>
                 {/* <Link className='navigation-widget' to="/coins">Coin Details</Link> */}
-                <Link className='navigation-widget' to="/all">Coins List</Link>
+                <Link className='navigation-widget' to="/coins">Coins List</Link>
             </div>
             <h1 className='title'><Link className='navigation-widget' to="/">Mock Crypto Trader</Link></h1>
         </div>

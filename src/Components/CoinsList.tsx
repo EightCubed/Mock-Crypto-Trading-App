@@ -41,23 +41,29 @@ const CURRENCY = "$";
 
 const CoinsList = () => {
     const [coinsList,setCoinsList] = useState<COINS_LIST_TYPE[]>([initState])
-    const [asc,setAsc] = useState<ASC_DESC>({order:'asc'})
+    const [order,setOrder] = useState<string>("market_cap")
+    const [asc,setAsc] = useState<ASC_DESC>({order:'desc'})
     const [isLoading,setIsLoading] = useState<boolean>(false)
     const [page,setPage] = useState<number>(1);
+    const [perPage,setPerPage] = useState<number>(PER_PAGE);
 
-    const fetchCoinsList = () => {
+    const fetchCoinsList = async () => {
         setIsLoading(true);
-        axios.get(`https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=${order}&per_page=${PER_PAGE}&page=${page}&sparkline=false`).then(
-            (res) => {
-                setCoinsList(res['data'])
-                setIsLoading(false)
-        }
+        axios.get(`https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=${order+'_'+asc.order}&per_page=${perPage}&page=${page}&sparkline=false`).then(
+                (res) => {
+                    setCoinsList(res['data'])
+                    setIsLoading(false)
+            }
         )
     }
 
     useEffect( () => {
         fetchCoinsList()
-    },[page])
+    },[page,perPage,asc])
+
+    const handlePerPage = (num:number) => {
+        setPerPage(num);
+    }
 
     const handleIncrement = () => {
         setPage(page+1)
@@ -69,7 +75,7 @@ const CoinsList = () => {
         }
     }
 
-    const navigate=useNavigate()
+    const navigate = useNavigate()
 
     const handleClick = (data:COINS_LIST_TYPE) => {
         navigate(`/coins/${data.id}`)
@@ -84,13 +90,15 @@ const CoinsList = () => {
       };
 
     const handleOrderChange = (str:string) => {
-        console.log(asc.order)
+        setOrder(str)
         if (asc.order==='asc')
             setAsc({order:'desc'})
         else
-            setAsc({order:'desc'})
-        console.log(asc.order)
+            setAsc({order:'asc'})
+        fetchCoinsList()
     }
+
+    console.log(perPage)
 
     return(
         <>
@@ -104,10 +112,10 @@ const CoinsList = () => {
                 </div>
                 <table className="table-list">
                     <tr className="">
-                        <td width={50}>Rank</td>
+                        <td width={50} onClick={()=>handleOrderChange("id")} className='hover-pointer'>Rank</td>
                         <td width={150}>Symbol</td>
                         <td width={200}>Coin Name</td>
-                        <td width={120} onClick={()=>handleOrderChange("market_cap")}>Market Cap</td>
+                        <td width={120} onClick={()=>handleOrderChange("market_cap")} className='hover-pointer'>Market Cap</td>
                         <td width={150}>All Time High</td>
                         <td width={150}>24H high</td>
                         <td width={150}>Current Price</td>
@@ -148,16 +156,27 @@ const CoinsList = () => {
                             </tr>)
                     })}
                 </table>
-                <div className="pagination">
-                    <button className="arrowRight" onClick={handleIncrement}>
-                        <FaArrowRight />
-                    </button>
-                    <span className="page">
-                        Page : {page}
-                    </span>
-                    <button className="arrowLeft" onClick={handleDecrement} disabled={page===1}>
-                        <FaArrowLeft />
-                    </button>
+                <div className="footer">
+                    <div className="per_page">
+                        <label>Per Page&nbsp;</label>
+                        <select onChange={(e)=>handlePerPage(parseInt(e.target.value))} name="perPage" id="perPage">
+                            <option value={10}>10</option>
+                            <option value={20} selected>20</option>
+                            <option value={50}>50</option>
+                            <option value={100}>100</option>
+                        </select>
+                    </div>
+                    <div className="pagination">
+                        <button className="arrowRight" onClick={handleIncrement}>
+                            <FaArrowRight />
+                        </button>
+                        <span className="page">
+                            Page : {page}
+                        </span>
+                        <button className="arrowLeft" onClick={handleDecrement} disabled={page===1}>
+                            <FaArrowLeft />
+                        </button>
+                    </div>
                 </div>
             </div>
         </>
